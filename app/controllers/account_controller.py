@@ -38,3 +38,10 @@ def delete_account(account_id: int, db: Session = Depends(get_db)):
         return {"message": "Account deleted"}
     except Exception:
         raise HTTPException(status_code=404, detail="Account not found")
+    
+@router.patch("/{account_id}", response_model=AccountResponse, summary="Partially update account")
+def patch_account(account_id: int, data: AccountUpdate, db: Session = Depends(get_db)):
+    try:
+        return account_service.update_account(db, account_id, data)
+    except Exception:
+        raise HTTPException(status_code=404, detail="Account not found")
