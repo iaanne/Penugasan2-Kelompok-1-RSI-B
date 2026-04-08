@@ -35,3 +35,10 @@ def delete_role(role_id: int, db: Session = Depends(get_db)):
         return {"message": "Role deleted"}
     except Exception:
         raise HTTPException(status_code=404, detail="Role not found")
+    
+@router.patch("/{role_id}", response_model=RoleResponse, summary="Partially update role")
+def patch_role(role_id: int, data: RoleUpdate, db: Session = Depends(get_db)):
+    try:
+        return role_service.update_role(db, role_id, data)
+    except Exception:
+        raise HTTPException(status_code=404, detail="Role not found")
