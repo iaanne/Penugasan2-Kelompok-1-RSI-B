@@ -1,0 +1,26 @@
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from app.database import get_db
+from app.schemas.registration import RegistrationCreate, RegistrationResponse
+from app.services import registration_service
+
+router = APIRouter(prefix="/registrations", tags=["Registrations"])
+
+@router.get("/", response_model=list[RegistrationResponse])
+def get_registrations(db: Session = Depends(get_db)):
+    return registration_service.get_registrations(db)
+
+@router.post("/", response_model=RegistrationResponse)
+def create_registration(data: RegistrationCreate, db: Session = Depends(get_db)):
+    try:
+        return registration_service.create_registration(db, data)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.delete("/{reg_id}")
+def delete_registration(reg_id: int, db: Session = Depends(get_db)):
+    try:
+        registration_service.delete_registration(db, reg_id)
+        return {"message": "Registration deleted"}
+    except:
+        raise HTTPException(status_code=404, detail="Registration not found")
