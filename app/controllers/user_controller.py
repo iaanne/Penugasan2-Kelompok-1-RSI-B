@@ -35,3 +35,10 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
         return {"message": "User deleted"}
     except Exception:
         raise HTTPException(status_code=404, detail="User not found")
+    
+@router.patch("/{user_id}", response_model=UserResponse, summary="Partially update user")
+def patch_user(user_id: int, data: UserUpdate, db: Session = Depends(get_db)):
+    try:
+        return user_service.update_user(db, user_id, data)
+    except Exception:
+        raise HTTPException(status_code=404, detail="User not found")
