@@ -14,7 +14,7 @@ def get_accounts(db: Session = Depends(get_db)):
 def get_account(account_id: int, db: Session = Depends(get_db)):
     try:
         return account_service.get_account(db, account_id)
-    except:
+    except Exception:
         raise HTTPException(status_code=404, detail="Account not found")
 
 @router.post("/", response_model=AccountResponse)
@@ -28,7 +28,7 @@ def create_account(data: AccountCreate, db: Session = Depends(get_db)):
 def update_account(account_id: int, data: AccountUpdate, db: Session = Depends(get_db)):
     try:
         return account_service.update_account(db, account_id, data)
-    except:
+    except Exception:
         raise HTTPException(status_code=404, detail="Account not found")
 
 @router.delete("/{account_id}")
@@ -36,5 +36,5 @@ def delete_account(account_id: int, db: Session = Depends(get_db)):
     try:
         account_service.delete_account(db, account_id)
         return {"message": "Account deleted"}
-    except:
+    except Exception:
         raise HTTPException(status_code=404, detail="Account not found")
