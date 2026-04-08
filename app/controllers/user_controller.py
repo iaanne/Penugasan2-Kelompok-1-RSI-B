@@ -14,7 +14,7 @@ def get_users(db: Session = Depends(get_db)):
 def get_user(user_id: int, db: Session = Depends(get_db)):
     try:
         return user_service.get_user(db, user_id)
-    except:
+    except Exception:
         raise HTTPException(status_code=404, detail="User not found")
 
 @router.post("/", response_model=UserResponse)
@@ -25,7 +25,7 @@ def create_user(data: UserCreate, db: Session = Depends(get_db)):
 def update_user(user_id: int, data: UserUpdate, db: Session = Depends(get_db)):
     try:
         return user_service.update_user(db, user_id, data)
-    except:
+    except Exception:
         raise HTTPException(status_code=404, detail="User not found")
 
 @router.delete("/{user_id}")
@@ -33,5 +33,5 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     try:
         user_service.delete_user(db, user_id)
         return {"message": "User deleted"}
-    except:
+    except Exception:
         raise HTTPException(status_code=404, detail="User not found")
