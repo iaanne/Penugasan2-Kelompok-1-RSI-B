@@ -26,3 +26,16 @@ def get_by_user_event(db: Session, user_id: int, event_id: int):
         Registration.user_id == user_id,
         Registration.event_id == event_id
     ).first()
+
+def get_live_blog(db: Session):
+    from app.models.registration import Registration
+    from app.models.user import User
+    from app.models.event import Event
+
+    return (
+        db.query(Registration, User, Event)
+        .join(User, Registration.user_id == User.id)
+        .join(Event, Registration.event_id == Event.id)
+        .order_by(Registration.id.desc())
+        .all()
+    )

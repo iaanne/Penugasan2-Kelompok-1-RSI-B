@@ -34,3 +34,16 @@ def delete_registration(db: Session, reg_id: int):
     if not reg:
         raise Exception("Registration not found")
     registration_repository.delete(db, reg)
+
+def get_live_blog(db: Session):
+    rows = registration_repository.get_live_blog(db)
+
+    result = []
+    for reg, user, event in rows:
+        result.append({
+            "event_name": event.name,
+            "user_name": user.first_name,
+            "registered_at": reg.created_at
+        })
+
+    return result

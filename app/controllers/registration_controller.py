@@ -24,3 +24,16 @@ def delete_registration(reg_id: int, db: Session = Depends(get_db)):
         return {"message": "Registration deleted"}
     except:
         raise HTTPException(status_code=404, detail="Registration not found")
+
+def get_live_blog(db: Session):
+    rows = registration_repository.get_live_blog(db)
+
+    result = []
+    for reg, user, event in rows:
+        result.append({
+            "event_name": event.name,
+            "user_name": user.first_name,
+            "registered_at": reg.created_at
+        })
+
+    return result
