@@ -1,15 +1,11 @@
-from sqlalchemy import Column, Integer, String, TIMESTAMP, SmallInteger
-from sqlalchemy.sql import func
+from sqlalchemy import Column, Integer, String, DateTime
 from app.database import Base
+from datetime import datetime
 
 class Event(Base):
     __tablename__ = "events"
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
     description = Column(String)
-    quota = Column(SmallInteger)
-    started_at = Column(TIMESTAMP)
-    ended_at = Column(TIMESTAMP)
-    created_at = Column(TIMESTAMP, server_default=func.now())
-    updated_at = Column(TIMESTAMP, onupdate=func.now())
+    date = Column(DateTime, default=datetime.utcnow)
