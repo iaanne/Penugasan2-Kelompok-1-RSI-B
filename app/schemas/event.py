@@ -1,28 +1,21 @@
 from pydantic import BaseModel
-from typing import Optional
 from datetime import datetime
+from typing import Optional
 
 class EventCreate(BaseModel):
-    name: str
-    description: str
-    quota: int
-    started_at: datetime
-    ended_at: datetime
+    title: str
+    description: Optional[str] = None
+    date: Optional[datetime] = None
 
 class EventUpdate(BaseModel):
-    name: Optional[str] = None
+    title: Optional[str] = None
     description: Optional[str] = None
-    quota: Optional[int] = None
-    started_at: Optional[datetime] = None
-    ended_at: Optional[datetime] = None
+    date: Optional[datetime] = None
 
 class EventResponse(BaseModel):
     id: int
-    name: str
-    description: str
-    quota: int
-    started_at: datetime
-    ended_at: datetime
-    created_at: datetime
+    title: str
+    description: Optional[str] = None
+    date: datetime
 
     model_config = {"from_attributes": True}
