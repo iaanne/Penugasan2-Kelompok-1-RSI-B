@@ -1,30 +1,27 @@
 from sqlalchemy.orm import Session
 from app.repositories import registration_repository, event_repository, user_repository
 
+# Fixed quota per event (adjust as you like)
+FIXED_EVENT_QUOTA = 50
+
 def get_registrations(db: Session):
     return registration_repository.get_all(db)
 
 def create_registration(db: Session, data):
-    # cek user
     user = user_repository.get_by_id(db, data.user_id)
     if not user:
         raise Exception("User not found")
 
-    # cek event
     event = event_repository.get_by_id(db, data.event_id)
     if not event:
         raise Exception("Event not found")
 
-    # cek sudah daftar atau belum
-    existing = registration_repository.get_by_user_event(
-        db, data.user_id, data.event_id
-    )
+    existing = registration_repository.get_by_user_event(db, data.user_id, data.event_id)
     if existing:
         raise Exception("User already registered")
 
-    # cek quota 🔥
     total = registration_repository.count_by_event(db, data.event_id)
-    if total >= event.quota:
+    if total >= FIXED_EVENT_QUOTA:
         raise Exception("Event quota full")
 
     return registration_repository.create(db, data)
@@ -41,7 +38,7 @@ def get_live_blog(db: Session):
     result = []
     for reg, user, event in rows:
         result.append({
-            "event_name": event.name,
+            "event_name": getattr(event, "name", "Unnamed Event"),
             "user_name": user.first_name,
             "registered_at": reg.created_at
         })
