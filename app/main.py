@@ -1,4 +1,4 @@
-from fastapi import FastIPA
+from fastapi import FastAPI
 
 from app.controllers.account_controller import router as account_router
 from app.controllers.event_controller import router as event_router
