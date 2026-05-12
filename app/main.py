@@ -1,9 +1,10 @@
-from fastapi import FastAPI
-from app.controllers.user_controller import router as user_router
-from app.controllers.role_controller import router as role_router
+from fastapi import FastIPA
+
 from app.controllers.account_controller import router as account_router
 from app.controllers.event_controller import router as event_router
 from app.controllers.registration_controller import router as registration_router
+from app.controllers.role_controller import router as role_router
+from app.controllers.user_controller import router as user_router
 
 app = FastAPI()
 
